@@ -2,7 +2,7 @@ package Tests;
 
 public class TestsCategorie {
 
-	public void testMsg() {
+	public void testCat() {
 		// TODO Auto-generated method stub
 		
 	}
