@@ -32,17 +32,20 @@ public class TestsUtilisateur {
 	        } catch (Exception e) {
 	            System.err.println("BAD exception d'ajout : \n" + e);
 	        }
-	        try { u1.delete(); } 
+	        try { 
+	        	u1.delete(); 
+	        	u2.delete();
+	        	} 
 	        catch (Exception e) {
 	        }
 	        /**
-	         * Test d'ajout d'un utilisateur (pseudo différente)
+	         * Test d'ajout d'un utilisateur (pseudo / tel différents)
 	         */
 	        try {
-	            System.out.println("\n> test ajout (localité différente)");
+	            System.out.println("\n> test ajout (pseudo / tel différents)");
 	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
 	            u1.create();
-	            u2 = new UtilisateurDB("Dupont", "Jules","065123456","DJules","tests");
+	            u2 = new UtilisateurDB("Dupont", "Jules","065123455","DJules","tests");
 	            u2.create();
 	            u1.read();
 	            u2.read();
