@@ -97,7 +97,7 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
     
     @Override
     public void read() throws Exception {
-    	String req = "select * from utilisateur where idUtilisateur = ?"; 
+    	String req = "select * from utilisateur where id_Utilisateur = ?"; 
         PreparedStatement pstmt = null;
         try
         {	pstmt = dbConnect.prepareStatement(req);
