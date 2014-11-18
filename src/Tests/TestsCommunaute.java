@@ -19,7 +19,9 @@ public class TestsCommunaute {
 		        UtilisateurDB uti = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
 		        UtilisateurDB uti2 = new UtilisateurDB("Dupont2", "Jules2","0655656","DJule2","tests2");
 		        CommunauteDB.setConnection(con);
-		        CommunauteDB comm1 = null, comm2 = null;
+		        CommunauteDB comm1 = null, comm2 = null, comm3 = null;
+		        
+		    
 		        try{
 		        	uti.create();
 		        	uti.read();
@@ -28,8 +30,7 @@ public class TestsCommunaute {
 		        	
 		        }
 		        catch(Exception e){
-		        	
-		        }
+		        	   }
 		         
 		        
 		        /**
@@ -50,10 +51,8 @@ public class TestsCommunaute {
 		        try { 
 		        	
 		        	comm1.delete(); 
-		        	comm2.delete();
-		        	comm1.read();
-		        	System.err.println("okokok" + comm1 );
-		        	} 
+		        			        	
+		         	} 
 		        catch (Exception e) {
 		        }
 		        
@@ -89,7 +88,7 @@ public class TestsCommunaute {
 		            comm1.create();
 		            comm2 = new CommunauteDB("Java", "Java",uti);
 		            comm2.create();
-		            System.err.println("BAD utilisateur entré 2x ");
+		            System.err.println("BAD Communauté avec nom identique ");
 		        } 
 		        catch (Exception e) {
 		            System.out.println("OK exception normale de doublon : " + e);
@@ -143,10 +142,34 @@ public class TestsCommunaute {
 		            System.err.println("BAD exception de mise à jour :\n" + e);
 		        }
 		        
+		        /**
+		         * Test de mise à jour (Nouveau nom existant)
+		         */
+		        try {
+		        	comm3 = new CommunauteDB("Java2", "Java",uti);
+		        	comm3.create();
+		            System.out.println("\n> test mise à jour infructueux (Nouveau nom existant)");
+		            comm1 = new CommunauteDB("Java", "Java",uti);
+		            comm1.create();
+		            int numcom = comm1.getIdCommunaute();
+		            comm1.setNomCommunaute("Java2");
+		            comm1.setPassword("password");
+		            comm1.update();
+		            
+		            comm2 = new CommunauteDB(numcom);
+		            comm2.read();
+		            System.out.println("u2=" + comm2);
+		            comm1.delete();
+		            System.out.println("BAD Communaaute avec nom identique");
+		        } 
+		        catch (Exception e) {
+		        	System.out.println("OK exception normale de doublon : " + e);
+		        }
+		        
 		        try {
 		        	comm1.delete(); 
 		        	comm2.delete();
-		        	
+		        	comm3.delete();
 		        	} 
 		        catch (Exception e) {
 		        }
@@ -155,7 +178,8 @@ public class TestsCommunaute {
 
 
 		        try {
-		        	
+		        	uti.delete();
+		        	uti2.delete();
 		            con.close();
 		        } catch (Exception e) {
 		        }

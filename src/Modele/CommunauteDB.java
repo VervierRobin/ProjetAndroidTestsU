@@ -72,7 +72,7 @@ public class CommunauteDB extends Communaute implements CRUD {
     public void delete() throws Exception {
         CallableStatement cstmt = null;
         try
-        {   String query = "CALL DELETE_CATEGORIE(?)";
+        {   String query = "CALL DELETE_COMMUNAUTE(?)";
             cstmt = dbConnect.prepareCall(query);
             cstmt.setInt(1,this.idCommunaute);
             cstmt.executeUpdate();
@@ -84,17 +84,24 @@ public class CommunauteDB extends Communaute implements CRUD {
 
     @Override
     public void read() throws Exception {
-    	String req = "SELECT * FROM COMMUNAUTE WHERE ID_COMMUNAUTE = ?"; 
+    	String req = "SELECT * FROM VUEUTIL_COMM WHERE ID_COMMUNAUTE = ?"; 
         PreparedStatement pstmt = null;
         try
         {	pstmt=dbConnect.prepareStatement(req);
             pstmt.setInt(1,this.idCommunaute);
      	    ResultSet rs= (ResultSet)pstmt.executeQuery();	
-        	
-     	    if(rs.next()) {
+        	if(rs.next()) {
      	    	this.nomCommunaute = rs.getString("NOM_COMMUNAUTE");
-                this.password = rs.getString("PASSWORD");
-                this.administrateur = new UtilisateurDB(rs.getInt("ADMINISTRATEUR"));
+                this.password = rs.getString("PASSCOMM");
+                int idAdm = rs.getInt("ADMINISTRATEUR");
+                String nomAdm = rs.getString("NOM");
+                String prnom = rs.getString("PRENOM");
+                String tel =  rs.getString("TELEPHONE");
+                String passAdm =  rs.getString("PASSWORD");
+                String pseudo =  rs.getString("PSEUDO");
+                
+                this.administrateur = new UtilisateurDB(idAdm, nomAdm, prnom, tel, pseudo, passAdm);
+                
             }
      	    else { 
      	    	throw new Exception("Code inconnu");
