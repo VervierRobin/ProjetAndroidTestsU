@@ -86,7 +86,8 @@ public class CategorieDB extends Categorie implements CRUD {
         	
      	    if(rs.next()) {
      	    	this.nomCategorie = rs.getString("NOM_CATEGORIE");
-     	    	this.communaute = new Communaute(rs.getInt("COMMUNAUTE"));
+     	    	this.communaute = new CommunauteDB(rs.getInt("COMMUNAUTE"));
+     	    	((CRUD)this.communaute).read();
             }
      	    else { 
      	    	throw new Exception("Code inconnu");

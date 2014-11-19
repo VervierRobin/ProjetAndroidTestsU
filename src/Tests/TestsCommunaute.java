@@ -109,7 +109,7 @@ public class TestsCommunaute {
 		            comm1.delete(); 
 		            comm2 = new CommunauteDB(numcomm);
 		            comm2.read();
-		            System.err.println("BAD : Utilisateur pas effacé : \n" + comm2);
+		            System.err.println("BAD : Communauté pas effacée : \n" + comm2);
 
 		        } catch (Exception e) {
 		            System.out.println("OK exception normale d'effacement (Erreur de lecture après l'effacement) : \n" + e);
@@ -160,7 +160,7 @@ public class TestsCommunaute {
 		            comm2.read();
 		            System.out.println("u2=" + comm2);
 		            comm1.delete();
-		            System.out.println("BAD Communaaute avec nom identique");
+		            System.out.println("BAD Communaute avec nom identique");
 		        } 
 		        catch (Exception e) {
 		        	System.out.println("OK exception normale de doublon : " + e);

@@ -43,10 +43,7 @@ public class Categorie {
         return communaute;
     }
 
-    public void setCommunaute(Communaute communaute) {
-        this.communaute = communaute;
-    }
-
+    
     @Override
     public String toString() {
         return "Categorie{" + "idCategorie=" + idCategorie + ", nomCategorie=" + nomCategorie + ", communaute=" + communaute + '}';
