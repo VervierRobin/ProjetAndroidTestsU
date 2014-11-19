@@ -89,6 +89,8 @@ public class MessageDB extends Message implements CRUD {
         	
      	    if(rs.next()) {
      	    	setTexte(rs.getString("TEXTEMESSAGE"));
+     	    	this.categorie = new CategorieDB(rs.getInt("CATEGORIE"));
+     	    	((CRUD)this.categorie).read();
             }
      	    else { 
      	    	throw new Exception("Code inconnu");

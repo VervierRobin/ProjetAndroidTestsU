@@ -50,4 +50,11 @@ public class Message {
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
+
+
+	@Override
+	public String toString() {
+		return "Message [idMessage=" + idMessage + ", texte=" + texte
+				+ ", categorie=" + categorie + "]";
+	}
 }
