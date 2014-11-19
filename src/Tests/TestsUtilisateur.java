@@ -136,6 +136,7 @@ public class TestsUtilisateur {
 	        CommunauteDB.setConnection(con);
 	        UtilisateurDB adm = new UtilisateurDB("Lenoir", "Marc","065122555","LMarc","azerty");
 	        UtilisateurDB adm2 = new UtilisateurDB("Leblanc", "Yves","065144555","LYves","qwerty");
+	        UtilisateurDB adm3 = new UtilisateurDB("Lerouge", "Marie","066144555","LM","nbvcx");
 	        CommunauteDB comm1 = null , comm2 = null , comm3 = null ;
 	        
 	         try{
@@ -143,13 +144,20 @@ public class TestsUtilisateur {
 	        	adm.read();
 	        	adm2.create();
 	        	adm2.read();
+	        	adm3.create();
+	        	adm3.read();
+	        	
 	        	comm1 = new CommunauteDB("Java", "Java",adm);
 	        	comm2 = new CommunauteDB("Java2", "Java2",adm2);
 	        	comm3 = new CommunauteDB("Java3", "Java3",adm);
 	        	System.out.print( comm1);
 		        comm1.create();
-		        
 		        comm1.read();
+		        comm2.create();
+		        comm2.read();
+		        comm3.create();
+		        comm3.read();
+		        
 		        } catch (Exception e) {
 		        	System.err.print( e.getMessage());
 		        }
@@ -281,12 +289,119 @@ public class TestsUtilisateur {
 	            } catch (Exception e) {
 	        }
 	        
+	        
+	        /**
+	         * Test voir mes communautés
+	         */
+	       
+	        try {
+	            System.out.println("\n\n> test voir mes communautés (fructueux)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            
+	            u1.rejoindreCommunaute(comm1.getIdCommunaute(), "Java");
+	            u1.rejoindreCommunaute(comm2.getIdCommunaute(), "Java2");
+	            u1.rejoindreCommunaute(comm3.getIdCommunaute(), "Java3");
+	            
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= u1.mesCommunautes();
+	            System.out.println("OK : u1 : " + u1 +" - appartient à la communauté : ");
+	            for (Communaute comm : communities){
+	            	 System.out.println(" - "+ comm );
+	            }
+	            
+	        } 
+	        catch (Exception e) {
+	            System.err.println("BAD exception identification :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        /**
+	         * Test voir mes communautés (pas de communauté)
+	         */
+	        
+	        try {
+	            System.out.println("\n\n> test voir mes communautés (pas de communauté)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	                        
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= u1.mesCommunautes();	            
+	            System.err.println("BAD communauté");
+	        } 
+	        catch (Exception e) {
+	        	 System.out.println("OK exception normale :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        /**
+	         * Test voir mes communautés administrées
+	         */
+	       
+	        try {
+	            System.out.println("\n\n> test voir mes communautés administrée (fructueux)");
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= adm.mesCommunautesAdministrees();
+	            System.out.println("OK : adm : " + adm +" administre : ");
+	            for (Communaute comm : communities){
+	            	 System.out.println(" - "+ comm );
+	            }
+	            
+	        } 
+	        catch (Exception e) {
+	            System.err.println("BAD exception communaute non trouvée :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        /**
+	         * Test voir mes communautés administrées (pas de communauté)
+	         */
+	        
+	        try {
+	            System.out.println("\n\n> test voir mes communautés administrée (pas de communauté)");
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= adm3.mesCommunautesAdministrees();
+	            System.err.println("BAD communauté administré trouvée");
+	        } 
+	        catch (Exception e) {
+	        	 System.out.println("OK exception normale :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        
+	        
+	        
             try{           	
 	            comm1.delete();
 	            comm2.delete();
 	            comm3.delete();
 	            adm.delete();
 	            adm2.delete();
+	            adm3.delete();
 	        } catch (Exception e) {
 	        }
 	        

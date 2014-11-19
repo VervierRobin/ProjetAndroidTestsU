@@ -152,7 +152,7 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
               communities.add(community);
            }
            if ( !trouvé )
-               throw new Exception("Aucun membre dans la communauté");
+               throw new Exception("N'apartient à aucune communauté");
            else 
                return communities;
         }
@@ -165,7 +165,7 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
       
     	ArrayList <Communaute> communities = new ArrayList <Communaute> ();
         Communaute community;
-        String req = "SELECT * FROM COMMUNAUTE WHERE ID_USER = ?"; 
+        String req = "SELECT * FROM COMMUNAUTE WHERE ADMINISTRATEUR = ?"; 
         PreparedStatement pstmt = null;
         
         try
