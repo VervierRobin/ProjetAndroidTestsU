@@ -33,6 +33,10 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
     public UtilisateurDB(String nom, String prenom, String telephone, String pseudonyme, String password) {
         super(nom, prenom, telephone, pseudonyme, password);
     }
+    
+    public UtilisateurDB(String pseudonyme, String password) {
+        super( pseudonyme, password);
+    }
 
     @Override
     public void create() throws Exception {
@@ -130,9 +134,10 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
     }    
     
     public ArrayList <Communaute> mesCommunautes () throws Exception {
-        ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+       
+    	ArrayList <Communaute> communities = new ArrayList <Communaute> ();
         Communaute community;
-        String req = "SELECT * FROM MEMBRE WHERE UTILISATEUR = ID_USER"; 
+        String req = "SELECT * FROM MEMBRE WHERE UTILISATEUR = ?"; 
         PreparedStatement pstmt = null;
         
         try
@@ -154,21 +159,21 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
         catch ( Exception e ) {
            throw new Exception(e.getMessage());      
         }
-    }/*
+    }
     
     public ArrayList <Communaute> mesCommunautesAdministrees () throws Exception {
-        ArrayList <Communaute> communities = new ArrayList <> ();
+      
+    	ArrayList <Communaute> communities = new ArrayList <Communaute> ();
         Communaute community;
-        CallableStatement cstmt = null;
-        String query = "{? = call READ_ADMIN_COMMUNAUTES(?)}";
+        String req = "SELECT * FROM COMMUNAUTE WHERE ID_USER = ?"; 
+        PreparedStatement pstmt = null;
+        
         try
         {  boolean trouvé = false;
-           cstmt = dbConnect.prepareCall(query);
-           cstmt.registerOutParameter(1,oracle.jdbc.OracleTypes.CURSOR);
-           cstmt.setInt(2,this.idUtilisateur);
-           cstmt.executeQuery();
-           ResultSet rs = (ResultSet)cstmt.getObject(1);
-           while(rs.next()) {
+	       pstmt = dbConnect.prepareStatement(req);
+	       pstmt.setInt(1,this.idUtilisateur);
+	 	   ResultSet rs = (ResultSet)pstmt.executeQuery();	
+           while (rs.next()) {
               trouvé = true; 
               community = new CommunauteDB(rs.getInt("ID_COMMUNAUTE"));
               ((CRUD)community).read();
@@ -182,38 +187,56 @@ public class UtilisateurDB extends Utilisateur implements CRUD {
         catch ( Exception e ) {
            throw new Exception(e.getMessage());      
         }
-    }
+    	
+    	
+    }	
+      
     
-    public Utilisateur Identification () throws Exception {
-        String req = "{? = call IDENTIFICATION(?,?)}";
-        CallableStatement cstmt = null;   
-        try 
-        { cstmt = dbConnect.prepareCall(req);
-          cstmt.registerOutParameter(1,oracle.jdbc.OracleTypes.CURSOR);
-	  cstmt.setString(2,this.pseudonyme);
-          cstmt.setString(3,this.password);
-	  cstmt.executeQuery();
-          ResultSet rs = (ResultSet)cstmt.getObject(1);
-          if(rs.next()) {
-              this.idUtilisateur = rs.getInt("ID_UTILISATEUR");
-              this.nom = rs.getString("NOM");
-              this.prenom = rs.getString("PRENOM");
-              this.telephone = rs.getString("TELEPHONE");
-          }
-	  else { 
-	     throw new Exception("Pseudonyme ou mot de passe erroné !");
-	  }
+    public void Identification () throws Exception {
+         	
+    	String req = "select * from utilisateur where pseudo = ? and password = ?"; 
+        PreparedStatement pstmt = null;
+        try
+        {	pstmt = dbConnect.prepareStatement(req);
+            pstmt.setString(1,this.pseudonyme);
+            pstmt.setString(2,this.password);
+            
+     	    ResultSet rs = (ResultSet)pstmt.executeQuery();	
+        	
+     	    if(rs.next()) {
+     	    	this.idUtilisateur = rs.getInt("ID_UTILISATEUR");
+                this.nom = rs.getString("NOM");
+                this.prenom = rs.getString("PRENOM");
+                this.telephone = rs.getString("TELEPHONE");
+          
+            }
+     	    else { 
+     	    	throw new Exception("Pseudonyme et/ou mot de passe incorrect");
+     	    }
+     	 }
+        catch(Exception e) {
+        	System.err.println("erreur"+e);
+        	//Log.d("connexion","erreur"+e);    
+            throw new Exception("Erreur lors de l'identification");
         }
-	catch(Exception e){          
-           throw new Exception("Erreur lors de l'identification");
+        finally	{ 
+        	try	{
+              pstmt.close();
+            }
+        	catch (Exception e)	{ }
         }
-        return this;
-    }*/
+    
+    }	
+    	
+    	
+    	
+    	
+    	
     
     public void rejoindreCommunaute( int idCommunaute, String password ) throws Exception {
         CallableStatement cstmt = null;
         try
-        {   String query = "CALL NOUVEAU_MEMBRE(?,?,?)";
+        {   String query = "CALL pck_nvmembre.nouveau_membre2(?,?,?)";
             cstmt = dbConnect.prepareCall(query);
             cstmt.setInt(1,idCommunaute);
             cstmt.setInt(2,this.idUtilisateur);

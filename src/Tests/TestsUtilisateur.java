@@ -3,7 +3,13 @@ package Tests;
 import java.sql.Connection;
 
 
+
+
+import java.util.ArrayList;
+
 import myconnections.DBConnection;
+import Modele.Communaute;
+import Modele.CommunauteDB;
 import Modele.UtilisateurDB;
 
 public class TestsUtilisateur {
@@ -103,14 +109,14 @@ public class TestsUtilisateur {
 	            System.out.println("\n> test mise à jour fructueux");
 	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
 	            u1.create();
-	            int numcli = u1.getIdUtilisateur();
+	            int numUti = u1.getIdUtilisateur();
 	            u1.setNom("nouvnom");
 	            u1.setPrenom("nouvprenom");
 	            u1.setTelephone("nouvtel");
 	            u1.setPseudonyme("nouvpseudo");
 	            u1.setPassword("nouvpassword");
 	            u1.update();
-	            u2 = new UtilisateurDB(numcli);
+	            u2 = new UtilisateurDB(numUti);
 	            u2.read();
 	            System.out.println("u2=" + u2);
 	            u1.delete();
@@ -124,10 +130,168 @@ public class TestsUtilisateur {
 	        catch (Exception e) {
 	        }
 	        
+	        /**
+	         * ------- Tests Communaute - Utilisateur -----------
+	         */
+	        CommunauteDB.setConnection(con);
+	        UtilisateurDB adm = new UtilisateurDB("Lenoir", "Marc","065122555","LMarc","azerty");
+	        UtilisateurDB adm2 = new UtilisateurDB("Leblanc", "Yves","065144555","LYves","qwerty");
+	        CommunauteDB comm1 = null , comm2 = null , comm3 = null ;
+	        
+	         try{
+	        	adm.create();
+	        	adm.read();
+	        	adm2.create();
+	        	adm2.read();
+	        	comm1 = new CommunauteDB("Java", "Java",adm);
+	        	comm2 = new CommunauteDB("Java2", "Java2",adm2);
+	        	comm3 = new CommunauteDB("Java3", "Java3",adm);
+	        	System.out.print( comm1);
+		        comm1.create();
+		        
+		        comm1.read();
+		        } catch (Exception e) {
+		        	System.err.print( e.getMessage());
+		        }
+	        
+	        /**
+	         * Test rejoindre communauté scénario nominal
+	         */
 	       
-
-
 	        try {
+	            System.out.println("\n\n> test rejoindre une communauté (fructueux)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            
+	            u1.rejoindreCommunaute(comm1.getIdCommunaute(), "Java");
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= u1.mesCommunautes();
+	            System.out.println("OK : u1 : " + u1 +" - appartient à la communauté : ");
+	            for (Communaute comm : communities){
+	            	 System.out.println(" - "+ comm );
+	            }
+	            
+	        } 
+	        catch (Exception e) {
+	            System.err.println("BAD exception de mise à jour :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        /**
+	         * Test rejoindre communauté (Mot de passe communaute incorrect)
+	         */
+	        
+	        try {
+	            System.out.println("\n\n> test rejoindre une communauté (Mot de psse incorrect");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            
+	            u1.rejoindreCommunaute(comm1.getIdCommunaute(), "blabla");
+	            ArrayList <Communaute> communities = new ArrayList <Communaute> ();
+	            communities= u1.mesCommunautes();
+	            System.err.println("BAD : Identification a échoué");
+	        } 
+	        catch (Exception e) {
+	            System.out.println("OK exception normale :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        
+	        /**
+	         * Test identification scénario nominal
+	         */
+	       
+	        try {
+	            System.out.println("\n\n> test identification (fructueux)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            u2 = new UtilisateurDB("DJule","tests");
+	            u2.Identification();
+	            u2.read();
+	            System.out.println("ok : u2 : " + u2);
+	            
+	        } 
+	        catch (Exception e) {
+	            System.err.println("BAD exception identification :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        /**
+	         * Test identification (mot de passe incorrect)
+	         */
+	        
+	        try {
+	            System.out.println("\n\n> test identification (Mot de passe incorrect)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            u2 = new UtilisateurDB("DJule","blabla");
+	            u2.Identification();
+	            u2.read();
+	            System.err.println("BAD : Identification a échoué");
+	        } 
+	        catch (Exception e) {
+	        	 System.out.println("OK exception normale :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+	        /**
+	         * Test identification (pseudo incorrect)
+	         */
+	        
+	        try {
+	            System.out.println("\n\n> test identification (pseudo incorrect)");
+	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
+	            u1.create();
+	            u2 = new UtilisateurDB("Blabla","tests");
+	            u2.Identification();
+	            u2.read();
+	            System.err.println("BAD : Identification a échoué");
+	        } 
+	        catch (Exception e) {
+	        	 System.out.println("OK exception normale :\n" + e);
+	        }
+	              
+	        
+	        try{
+            	u1.delete();
+            	
+	            } catch (Exception e) {
+	        }
+	        
+            try{           	
+	            comm1.delete();
+	            comm2.delete();
+	            comm3.delete();
+	            adm.delete();
+	            adm2.delete();
+	        } catch (Exception e) {
+	        }
+	        
+	        try {
+	        	
 	            con.close();
 	        } catch (Exception e) {
 	        }
