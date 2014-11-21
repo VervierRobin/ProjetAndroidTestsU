@@ -195,7 +195,7 @@ public class TestsUtilisateur {
 	         */
 	        
 	        try {
-	            System.out.println("\n\n> test rejoindre une communauté (Mot de psse incorrect");
+	            System.out.println("\n\n> test rejoindre une communauté (Mot de passe incorrect)");
 	            u1 = new UtilisateurDB("Dupont", "Jules","065123456","DJule","tests");
 	            u1.create();
 	            
